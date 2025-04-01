@@ -1,0 +1,13 @@
+## Interface: 11506
+## Version: 1.0.0
+## Title: Healer Utils
+## Notes: Mana Tracking/Announcement and Drinking Button for Healers
+## Author: Maxranviir
+## SavedVariables: HealerUtilsDB
+
+core.lua
+config.lua
+water.lua
+button.lua
+mana.lua
+main.lua
