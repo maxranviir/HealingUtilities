@@ -1,15 +1,3 @@
-local _, class = UnitClass("player")
-local color = RAID_CLASS_COLORS[class]
-
-if not loadCheck() then
-    C_Timer.After(3, function()
-        print((color and string.format("|cFF%02X%02X%02X%s|r",
-         color.r * 255, color.g * 255, color.b * 255, class))
-        .. " does not use mana. Healer Utilities Disabled.")
-    end)
-    return
-end
-
 local function initHealingAddon()
     if not HealerUtilsDB then HealerUtilsDB = {} end
     if not HealerUtilsDB.position then HealerUtilsDB.position = { x = 0, y = 0} end

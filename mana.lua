@@ -1,7 +1,3 @@
-if not loadCheck() then
-    return
-end
-
 local lastAnnounceTime = 0
 
 function manaAnnounce()

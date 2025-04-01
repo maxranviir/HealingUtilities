@@ -1,5 +1,5 @@
 local function iconUpdate()
-    if not drinkBtn then
+    if not drinkBtn or not drinkBtn:IsShown() then
         return
     end
 
