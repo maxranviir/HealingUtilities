@@ -1,6 +1,14 @@
+if not loadCheck() then
+    return
+end
+
 local lastAnnounceTime = 0
 
 function manaAnnounce()
+    if not IsInGroup() then
+        return
+    end
+
     if manaPercent <=75 and manaPercent > 50 and lastManaPercent > 75 then
         SendChatMessage("{star} Mana is at " .. math.floor(manaPercent) .. "%! {star}", "PARTY")
     end
@@ -13,11 +21,11 @@ function manaAnnounce()
         SendChatMessage("{cross} Mana is at " .. math.floor(manaPercent) .. "%! {cross}", "PARTY")
     end
 
-    if manaPercent <=10 and manaPercent > 0 and lastManaPercent > 10 then
+    if manaPercent <=10 and manaPercent > 5 and lastManaPercent > 10 then
         SendChatMessage("{skull} Mana is at " .. math.floor(manaPercent) .. "%! {skull}", "PARTY")
     end
 
-    if manaPercent == 0 and lastManaPercent > 0 then
+    if manaPercent <=5 and lastManaPercent > 5 then
         local currentTime = GetTime()
         if currentTime - lastAnnounceTime >= 10 then
             SendChatMessage("I am out of mana!", "PARTY")
