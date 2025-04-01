@@ -14,7 +14,8 @@ loadCheck = function()
     end
 end
 
-if not loadCheck() and huClass ~= "DRUID" then
+if not loadCheck() then
+    if huClass ~= "DRUID" then
     C_Timer.After(3, function()
         print("[Healer Utilities]: " .. 
             (huClassColor and string.format("|cFF%02X%02X%02X%s|r", 
@@ -23,11 +24,12 @@ if not loadCheck() and huClass ~= "DRUID" then
     end)
     return
 end
+end
 
 local druidProblemFrame = CreateFrame("Frame")
 druidProblemFrame:RegisterEvent("UNIT_DISPLAYPOWER")
 druidProblemFrame:SetScript("OnEvent", function(self, event, unit)
-    if unit == "player" then
+    if unit == "player" and powerType == 0 then
         loadCheck()
     end
 end)

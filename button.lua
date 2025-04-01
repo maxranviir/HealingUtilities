@@ -24,9 +24,14 @@ local function iconUpdate()
             drinkBtn:Hide()
         end
     elseif not drinkBtn:IsShown() and not InCombatLockdown() then
+        if bestWater then
             drinkBtn:Show()
         end
     end
+    if not bestWater and drinkBtn:IsShown() then
+        drinkBtn:Hide()
+            end
+        end
 
 function createDrinkBtn()
     if drinkBtn then
