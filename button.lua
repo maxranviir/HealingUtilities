@@ -91,12 +91,10 @@ function createDrinkBtn()
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
         end
-    else
-        if not drinkBtn:IsShown() then
+    elseif not drinkBtn:IsShown() and not InCombatLockdown() then
             drinkBtn:Show()
         end
     end
-end
 
 
 local bagCheckFrame = CreateFrame("Frame")

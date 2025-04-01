@@ -18,8 +18,8 @@ initFrame:SetScript("OnEvent", function(self, event, ...)
             if event == "PLAYER_LOGIN" and not hasPrintedInit then
                 hasPrintedInit = true
             C_Timer.After(3, function()
-        print((color and string.format("|cFF%02X%02X%02X%s|r",
-         color.r * 255, color.g * 255, color.b * 255, class))
+        print((huClassColor and string.format("|cFF%02X%02X%02X%s|r",
+         huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
     .. " detected.")
     print("Healer Utilities v1.0 Loaded.")
     print("You are currently assigned as a " .. "|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES:16:16:0:0:128:128:64:128:0:64|t" .. " HEALER. Healer Utilities active!")
@@ -37,7 +37,9 @@ manaCheckFrame:SetScript("OnEvent", function(self, event, unit)
     if event == "UNIT_POWER_UPDATE" and unit == "player" then
         GetManaPercent()
         manaCheckBtnToggle()
-        manaAnnounce()
+        if IsInGroup() then
+            manaAnnounce()
+        end
     end
 end)
 

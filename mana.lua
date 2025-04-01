@@ -1,10 +1,6 @@
 local lastAnnounceTime = 0
 
 function manaAnnounce()
-    if not IsInGroup() then
-        return
-    end
-
     if manaPercent <=75 and manaPercent > 50 and lastManaPercent > 75 then
         SendChatMessage("{star} Mana is at " .. math.floor(manaPercent) .. "%! {star}", "PARTY")
     end
