@@ -1,7 +1,3 @@
-if not huLoadConditions then
-    return
-end
-
 local lastAnnounceTime = 0
 
 function manaAnnounce()

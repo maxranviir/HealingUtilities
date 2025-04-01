@@ -1,7 +1,3 @@
-if not huLoadConditions then
-    return
-end
-
 local function iconUpdate()
     if not drinkBtn or not drinkBtn:IsShown() then
         return
