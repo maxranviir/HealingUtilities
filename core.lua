@@ -1,4 +1,4 @@
-print("Healer Utilities version-1.0.0 Loaded.")
+print("[Healer Utilities]: version-1.0.0 |cff00ff00Loaded.|r")
 loadCheck = function()
     local powerType = UnitPowerType("player")
     return powerType == 0
@@ -9,25 +9,37 @@ huClassColor = RAID_CLASS_COLORS[huClass]
 
 if not loadCheck() then
     C_Timer.After(3, function()
-        print((huClassColor and string.format("|cFF%02X%02X%02X%s|r",
-         huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
+        print("[Healer Utilities]: " .. 
+            (huClassColor and string.format("|cFF%02X%02X%02X%s|r", 
+                huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
         .. "|cffffff00 does not use mana. Healer Utilities|r |cffff0000Disabled.|r")
     end)
     return
 end
 
+local initActive = false
+local lastRole = nil
+
 local initFrame = CreateFrame("Frame")
 initFrame:RegisterEvent("PLAYER_ROLES_ASSIGNED")
-if event == "PLAYER_ROLES_ASSIGNED" then
+initFrame:SetScript("OnEvent", function(self, event)
+    if event == "PLAYER_ROLES_ASSIGNED" then
     local role = UnitGroupRolesAssigned("player")
-    if role == "HEALER" then
-        print((huClassColor and string.format("|cFF%02X%02X%02X%s|r",
+    if role == "HEALER" and lastRole ~= "HEALER" then
+        C_Timer.After(0.5, function()
+        print("[Healer Utilities]: " .. 
+            (huClassColor and string.format("|cFF%02X%02X%02X%s|r",
                 huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass)) 
-        .. "|cffffff00 and Healer assignment detected. Healer Utilities|r |cff00ff00Active!|r")
-elseif drinkBtn then
-    drinkBtn:Hide()
-end
-end
+        .. "|cffffff00 Healer detected. Healer Utilities|r |cff00ff00Active!|r")
+    end)
+    elseif role ~= "HEALER" and lastRole == "HEALER" then
+        if drinkBtn then
+            drinkBtn:Hide()
+        end
+    end
+    lastRole = role
+    end
+end)
 
 drinkBtn = nil
 bestWater = nil

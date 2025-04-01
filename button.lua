@@ -14,6 +14,19 @@ local function iconUpdate()
         end
     end
 
+        function manaCheckBtnToggle()
+    if not drinkBtn then return end
+    if manaPercent >=75 then
+        if drinkBtn:IsShown() then
+            drinkBtn:Hide()
+        end
+    else
+        if not drinkBtn:IsShown() and not InCombatLockdown() then
+            drinkBtn:Show()
+        end
+    end
+end
+
 function createDrinkBtn()
     if drinkBtn then
         return
@@ -82,20 +95,8 @@ function createDrinkBtn()
             drinkBtn.tex:SetTexture("Interface\\Icons\\inv_drink_07")
             drinkBtn.cooldown:Clear()
         end
-        drinkBtn:Hide()
+        manaCheckBtnToggle()
     end
-
-    function manaCheckBtnToggle()
-    if not drinkBtn then return end
-    if manaPercent >=75 then
-        if drinkBtn:IsShown() then
-            drinkBtn:Hide()
-        end
-    elseif not drinkBtn:IsShown() and not InCombatLockdown() then
-            drinkBtn:Show()
-        end
-    end
-
 
 local bagCheckFrame = CreateFrame("Frame")
 bagCheckFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
