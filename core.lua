@@ -1,3 +1,4 @@
+print("Healer Utilities version-1.0.0 Loaded.")
 loadCheck = function()
     local powerType = UnitPowerType("player")
     return powerType == 0
@@ -10,9 +11,22 @@ if not loadCheck() then
     C_Timer.After(3, function()
         print((huClassColor and string.format("|cFF%02X%02X%02X%s|r",
          huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
-        .. " does not use mana. Healer Utilities Disabled.")
+        .. "|cffffff00 does not use mana. Healer Utilities|r |cffff0000Disabled.|r")
     end)
     return
+end
+
+local initFrame = CreateFrame("Frame")
+initFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+if event == "GROUP_ROSTER_UPDATE" then
+    local role = UnitGroupRolesAssigned("player")
+    if role == "HEALER" then
+        print(huClassColor and string.format("|cFF%02X%02X%02X%s|r",
+                huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
+                .. "|cffffff00 and Healer assignment detected. Healer Utilities|r |cff00ff00Active!")
+elseif drinkBtn then
+    drinkBtn:Hide()
+end
 end
 
 drinkBtn = nil
