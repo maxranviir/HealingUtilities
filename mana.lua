@@ -1,3 +1,5 @@
+local lastAnnounceTime = 0
+
 function manaAnnounce()
     if manaPercent <=75 and manaPercent > 50 and lastManaPercent > 75 then
         SendChatMessage("{star} Mana is at " .. math.floor(manaPercent) .. "%! {star}", "PARTY")
@@ -16,9 +18,12 @@ function manaAnnounce()
     end
 
     if manaPercent == 0 and lastManaPercent > 0 then
-        SendChatMessage("I am out of mana!", "PARTY")
+        local currentTime = GetTime()
+        if currentTime - lastAnnounceTime >= 10 then
+            SendChatMessage("I am out of mana!", "PARTY")
+        lastAnnounceTime = currentTime
     end
-
-    lastManaPercent = manaPercent
+end
+lastManaPercent = manaPercent
 end
 
