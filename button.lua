@@ -19,11 +19,11 @@ local function iconUpdate()
         return
     end
 
-    if manaPercent >=75 then
+    if manaPercent >=75 or InCombatLockdown() then
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
         end
-    elseif not drinkBtn:IsShown() and not InCombatLockdown() then
+    elseif not drinkBtn:IsShown() and then
         if bestWater then
             drinkBtn:Show()
         end

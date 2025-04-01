@@ -1,6 +1,6 @@
 ## Interface: 11506
 ## Version: 1.0.0
-## Title: Healer Utils
+## Title: Healer Utilities
 ## Notes: Mana Tracking/Announcement and Drinking Button for Healers
 ## Author: Maxranviir
 ## SavedVariables: HealerUtilsDB
