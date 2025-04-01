@@ -1,3 +1,7 @@
+if not huLoadCoonditions then
+    return
+end
+
 local function initHealingAddon()
     if not HealerUtilsDB then HealerUtilsDB = {} end
     if not HealerUtilsDB.position then HealerUtilsDB.position = { x = 0, y = 0} end

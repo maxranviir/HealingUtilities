@@ -1,13 +1,20 @@
 print("[Healer Utilities]: version-1.0.0 |cff00ff00Loaded.|r")
+
+huLoadConditions = nil
+local huClass = select(2, UnitClass("player"))
+local huClassColor = RAID_CLASS_COLORS[huClass]
+
 loadCheck = function()
     local powerType = UnitPowerType("player")
-    return powerType == 0
+    if powerType == 0 then
+        huLoadConditions = true
+        return true
+    else
+        return false
+    end
 end
 
-huClass = select(2, UnitClass("player"))
-huClassColor = RAID_CLASS_COLORS[huClass]
-
-if not loadCheck() then
+if not loadCheck() and huClass ~= "DRUID" then
     C_Timer.After(3, function()
         print("[Healer Utilities]: " .. 
             (huClassColor and string.format("|cFF%02X%02X%02X%s|r", 
@@ -16,6 +23,14 @@ if not loadCheck() then
     end)
     return
 end
+
+local druidProblemFrame = CreateFrame("Frame")
+druidProblemFrame:RegisterEvent("UNIT_DISPLAYPOWER")
+druidProblemFrame:SetScript("OnEvent", function(self, event, unit)
+    if unit == "player" then
+        loadCheck()
+    end
+end)
 
 local initActive = false
 local lastRole = nil

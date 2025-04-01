@@ -1,3 +1,7 @@
+if not huLoadConditions then
+    return
+end
+
 local function iconUpdate()
     if not drinkBtn or not drinkBtn:IsShown() then
         return
@@ -14,18 +18,19 @@ local function iconUpdate()
         end
     end
 
-        function manaCheckBtnToggle()
-    if not drinkBtn then return end
+    function manaCheckBtnToggle()
+    if not drinkBtn then
+        return
+    end
+
     if manaPercent >=75 then
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
         end
-    else
-        if not drinkBtn:IsShown() and not InCombatLockdown() then
+    elseif not drinkBtn:IsShown() and not InCombatLockdown() then
             drinkBtn:Show()
         end
     end
-end
 
 function createDrinkBtn()
     if drinkBtn then
