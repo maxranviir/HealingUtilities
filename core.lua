@@ -17,13 +17,13 @@ if not loadCheck() then
 end
 
 local initFrame = CreateFrame("Frame")
-initFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
-if event == "GROUP_ROSTER_UPDATE" then
+initFrame:RegisterEvent("PLAYER_ROLES_ASSIGNED")
+if event == "PLAYER_ROLES_ASSIGNED" then
     local role = UnitGroupRolesAssigned("player")
     if role == "HEALER" then
-        print(huClassColor and string.format("|cFF%02X%02X%02X%s|r",
-                huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
-                .. "|cffffff00 and Healer assignment detected. Healer Utilities|r |cff00ff00Active!")
+        print((huClassColor and string.format("|cFF%02X%02X%02X%s|r",
+                huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass)) 
+        .. "|cffffff00 and Healer assignment detected. Healer Utilities|r |cff00ff00Active!|r")
 elseif drinkBtn then
     drinkBtn:Hide()
 end
