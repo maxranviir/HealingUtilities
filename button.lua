@@ -23,7 +23,7 @@ local function iconUpdate()
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
         end
-    elseif not drinkBtn:IsShown() and then
+    elseif not drinkBtn:IsShown() then
         if bestWater then
             drinkBtn:Show()
         end

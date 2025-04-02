@@ -20,7 +20,7 @@ if not loadCheck() then
         print("[Healer Utilities] " .. 
             (huClassColor and string.format("|cFF%02X%02X%02X%s|r", 
                 huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass))
-        .. "|cffffff00 does not use mana.|r |cffff0000Disabled.|r")
+        .. "|cffffff00 detected.|r |cffff0000Disabled.|r")
     end)
     return
 end
@@ -47,7 +47,7 @@ initFrame:SetScript("OnEvent", function(self, event)
         print("[Healer Utilities] " .. 
             (huClassColor and string.format("|cFF%02X%02X%02X%s|r",
                 huClassColor.r * 255, huClassColor.g * 255, huClassColor.b * 255, huClass)) 
-        .. "|cffffff00 Healer detected.|r |cff00ff00Active!|r")
+        .. "|cffffff00 healer detected.|r |cff00ff00Active!|r")
     end)
     elseif role ~= "HEALER" and lastRole == "HEALER" then
         if drinkBtn then
