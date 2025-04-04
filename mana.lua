@@ -1,6 +1,16 @@
+local healthPercent = 100
 local lastAnnounceTime = 0
 
+local function GetHealthPercent()
+    healthPercent = (UnitHealth("player") / UnitHealthMax("player")) * 100
+end
+
 function manaAnnounce()
+    local _, zoneType = IsInInstance()
+    if healthPercent == 0 or zoneType == "pvp" or not huIsHealer then
+        return
+    end
+
     if manaPercent <=75 and manaPercent > 50 and lastManaPercent > 75 then
         SendChatMessage("{star} Mana is at " .. math.floor(manaPercent) .. "%! {star}", "PARTY")
     elseif manaPercent <=50 and manaPercent > 25 and lastManaPercent > 50 then

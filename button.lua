@@ -14,24 +14,41 @@ local function iconUpdate()
         end
     end
 
-    function manaCheckBtnToggle()
+    function buttonVisibilityCheck()
     if not drinkBtn then
         return
     end
 
-    if manaPercent >=75 or InCombatLockdown() then
+    if InCombatLockdown() then
+        drinkBtn:SetAlpha(0.0)
+        drinkBtn:SetHighlightTexture("", "ADD")
+        drinkBtn:SetScript("OnEnter", nil)
+        drinkBtn:SetScript("OnLeave", nil)
+    else
+        drinkBtn:SetAlpha(1.0)
+        drinkBtn:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+        drinkBtn:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            if bestWater and bestWater.itemID then
+                GameTooltip:SetItemByID(bestWater.itemID)
+            else
+                GameTooltip:SetText("No valid water found.")
+            end
+            GameTooltip:Show()
+        end)
+        drinkBtn:SetScript("OnLeave", function()
+            GameTooltip:Hide()
+        end)
+    end
+    if not InCombatLockdown() then
+    if manaPercent >=75 or not bestWater then
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
         end
-    elseif not drinkBtn:IsShown() then
-        if bestWater then
+    elseif not drinkBtn:IsShown() and bestWater then
             drinkBtn:Show()
         end
     end
-    if not bestWater and drinkBtn:IsShown() then
-        drinkBtn:Hide()
-            end
-        end
 
 function createDrinkBtn()
     if drinkBtn then
@@ -62,7 +79,7 @@ function createDrinkBtn()
             if bestWater then
                 GameTooltip:SetItemByID(bestWater.itemID)
             else
-                GameTooltip:SetText("No valid water.")
+                GameTooltip:SetText("No valid water found.")
             end
             GameTooltip:Show()
         end)
@@ -77,10 +94,9 @@ function createDrinkBtn()
 
         drinkBtn:SetScript("OnDragStop", function(self)
             self:StopMovingOrSizing()
-            if not HealerUtilsDB.position then HealerUtilsDB.position = { x = 0, y = 0} end
             local point, _, _, x, y = self:GetPoint()
-            HealerUtilsDB.position.x = x
-            HealerUtilsDB.position.y = y
+            HealerUtilsDB.dButtonPosition.x = x
+            HealerUtilsDB.dButtonPosition.y = y
             print("Healer Utilities Button Position Saved at ["..x.." , "..y.."]!")
         end)
 
@@ -101,14 +117,6 @@ function createDrinkBtn()
             drinkBtn.tex:SetTexture("Interface\\Icons\\inv_drink_07")
             drinkBtn.cooldown:Clear()
         end
-        manaCheckBtnToggle()
+        buttonVisibilityCheck()
     end
-
-local bagCheckFrame = CreateFrame("Frame")
-bagCheckFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-bagCheckFrame:RegisterEvent("BAG_UPDATE")
-bagCheckFrame:SetScript("OnEvent", function(self, event, ...)
-    if event == "PLAYER_ENTERING_WORLD" or event == "BAG_UPDATE" then
-        iconUpdate()
-    end
-end)
+end
