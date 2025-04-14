@@ -7,7 +7,7 @@ end
 
 function manaAnnounce()
     local _, zoneType = IsInInstance()
-    if healthPercent == 0 or zoneType == "pvp" or not huIsHealer then
+    if not HealerUtils.loadAnnounce or healthPercent == 0 or zoneType == "pvp" or not huIsHealer then
         return
     end
 
