@@ -96,8 +96,8 @@ function createDrinkBtn()
     drinkBtn:SetScript("OnDragStop", function(self)
         self:StopMovingOrSizing()
         local point, _, _, x, y = self:GetPoint()
-        HealerUtilsDB.dButtonPosition.x = x
-        HealerUtilsDB.dButtonPosition.y = y
+        HealerUtilsDB.dBtnPos.x = x
+        HealerUtilsDB.dBtnPos.y = y
         print("Healer Utilities Button Position Saved at [" .. x .. " , " .. y .. "]!")
     end)
 
@@ -120,5 +120,5 @@ function createDrinkBtn()
     end
     buttonVisibilityCheck()
     drinkBtn:ClearAllPoints()
-    drinkBtn:SetPoint("CENTER", UIParent, "CENTER", HealerUtilsDB.dButtonPosition.x, HealerUtilsDB.dButtonPosition.y)
+    drinkBtn:SetPoint("CENTER", UIParent, "CENTER", HealerUtilsDB.dBtnPos.x, HealerUtilsDB.dBtnPos.y)
 end
