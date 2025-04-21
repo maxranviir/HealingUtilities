@@ -14,18 +14,41 @@ function iconUpdate()
     end
 end
 
+function buttonUpdater()
+    if not drinkBtn then
+        return
+    end
+    if HealerUtilsDB.dbScaleValue and not InCombatLockdown() then
+        local scale = HealerUtilsDB.dbScaleValue
+        local x = HealerUtilsDB.dBtnPos.x / scale
+        local y = HealerUtilsDB.dBtnPos.y / scale
+        drinkBtn:SetScale(HealerUtilsDB.dbScaleValue)
+        drinkBtn:ClearAllPoints()
+        drinkBtn:SetPoint("CENTER", UIParent, "CENTER", x, y)
+    end
+
+    if HealerUtilsDB.dBtnLock then
+        drinkBtn:SetScript("OnDragStart", nil)
+    else
+        drinkBtn:SetScript("OnDragStart", function(self)
+            self:StartMoving()
+        end)
+    end
+end
+
 function buttonVisibilityCheck()
     if not drinkBtn then
         return
     end
 
-    if InCombatLockdown() then
+    if HealerUtilsDB.dBtnCombatHide and InCombatLockdown() then
         drinkBtn:SetAlpha(0.0)
         drinkBtn:SetHighlightTexture("", "ADD")
         drinkBtn:SetScript("OnEnter", nil)
         drinkBtn:SetScript("OnLeave", nil)
         return
     end
+
 
     drinkBtn:SetAlpha(1.0)
     drinkBtn:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
@@ -42,6 +65,15 @@ function buttonVisibilityCheck()
         GameTooltip:Hide()
     end)
 
+    if InCombatLockdown() then
+        return
+    end
+
+    if zoneType == "pvp" and not HealerUtilsDB.dBtnBG then
+        drinkBtn:Hide()
+        return
+    end
+
     if UnitIsDead("player") or manaPercent >= 75 or not bestWater then
         if drinkBtn:IsShown() then
             drinkBtn:Hide()
@@ -52,7 +84,7 @@ function buttonVisibilityCheck()
 end
 
 function createDrinkBtn()
-    if drinkBtn or not huLoadConditions then
+    if drinkBtn or not huLoadConditions or not HealerUtilsDB.dButton then
         return
     end
 

@@ -37,8 +37,8 @@ coreFrame:SetScript("OnEvent", function(self, event, unit)
             end
         end
 
+        createAnnounceSettings()
         huLoadConditions = loadCheck()
-        createOptionsMenu()
 
         if not huLoadConditions then
             C_Timer.After(3, function()
