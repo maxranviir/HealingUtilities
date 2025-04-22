@@ -1,8 +1,8 @@
 local lastAnnounceTime = 0
-local _, zoneType = IsInInstance()
 
 
 function manaAnnounce()
+    local _, zoneType = IsInInstance()
     if not HealerUtilsDB.loadAnnounce or (not HealerUtilsDB.maBG and zoneType == "pvp") or not huLoadConditions then
         return
     end

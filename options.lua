@@ -43,6 +43,12 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
         optionsPanel:RegisterForDrag("LeftButton")
         optionsPanel:SetScript("OnDragStart", optionsPanel.StartMoving)
         optionsPanel:SetScript("OnDragStop", optionsPanel.StopMovingOrSizing)
+        optionsPanel:SetScript("OnShow", function(self)
+            PlaySound(839)
+        end)
+        optionsPanel:SetScript("OnHide", function(self)
+            PlaySound(840)
+        end)
         -------------------------------------------------------===TAB CREATION===-------------------------------------------------------
         local aboutTab = CreateFrame("Button", "$parentTab1", optionsPanel, "CharacterFrameTabButtonTemplate")
         aboutTab:SetID(1)
@@ -56,22 +62,14 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
         PanelTemplates_TabResize(settingsTab, 0)
         --------------------------------------------------------------------------------------------------------------------------------
         ------------------------------------------------------===FRAME CREATION===------------------------------------------------------
+
         local aboutFrame = CreateFrame("Frame", nil, optionsPanel)
         aboutFrame:SetAllPoints(optionsPanel)
 
-        local logo = aboutFrame:CreateTexture(nil, "ARTWORK")
-        logo:SetTexture("Interface\\AddOns\\HealerUtilities\\logo.tga")
-        logo:SetSize(250, 134)
-        logo:SetPoint("CENTER", 0, 140)
-
-        local logoText = aboutFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        logoText:SetPoint("BOTTOM", logo, 0, -10)
-        logoText:SetText("|cffffffffv.1.0.0 by Maxranviir|r")
-
-        local aFrameDeco = CreateFrame("Frame", nil, aboutFrame, "BackdropTemplate")
-        aFrameDeco:SetSize(700, 225)
-        aFrameDeco:SetPoint("CENTER", 0, -100)
-        aFrameDeco:SetBackdrop({
+        local aFrameDeco1 = CreateFrame("Frame", nil, aboutFrame, "BackdropTemplate")
+        aFrameDeco1:SetSize(627, 450)
+        aFrameDeco1:SetPoint("CENTER", 0, -18)
+        aFrameDeco1:SetBackdrop({
             bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
             edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
             tile = true,
@@ -79,8 +77,132 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
             edgeSize = 16,
             insets = { left = 4, right = 4, top = 4, bottom = 4 },
         })
-        aFrameDeco:SetBackdropColor(0.25, 0.25, 0.25, 0.8)
-        aFrameDeco:SetFrameLevel(1)
+        aFrameDeco1:SetBackdropColor(0.2, 0.2, 0.2, 0.8)
+
+        local aFrameDeco2 = CreateFrame("Frame", nil, aboutFrame, "InsetFrameTemplate3")
+        aFrameDeco2:SetSize(450, 40)
+        aFrameDeco2:SetPoint("CENTER", 0, 70)
+
+        local aFrameDeco3 = CreateFrame("Frame", nil, aboutFrame, "InsetFrameTemplate3")
+        aFrameDeco3:SetSize(540, 275)
+        aFrameDeco3:SetPoint("CENTER", 0, -93)
+
+        local aFrameDeco4 = CreateFrame("Frame", nil, aboutFrame, "InsetFrameTemplate3")
+        aFrameDeco4:SetSize(210, 180)
+        aFrameDeco4:SetPoint("CENTER", aFrameDeco3, -150, -35)
+
+        local aFrameDeco5 = CreateFrame("Frame", nil, aboutFrame, "InsetFrameTemplate3")
+        aFrameDeco5:SetSize(210, 180)
+        aFrameDeco5:SetPoint("CENTER", aFrameDeco3, 150, -35)
+
+        local logo = aFrameDeco3:CreateTexture(nil, "ARTWORK")
+        logo:SetTexture("Interface\\AddOns\\HealerUtilities\\logo.tga")
+        logo:SetSize(250, 134)
+        logo:SetPoint("CENTER", -50, 261)
+        logo:SetScale(0.9)
+
+        local healerIcon = aFrameDeco3:CreateTexture(nil, "ARTWORK")
+        healerIcon:SetTexture("Interface\\AddOns\\HealerUtilities\\healer.tga")
+        healerIcon:SetSize(64, 64)
+        healerIcon:SetPoint("CENTER", logo, 125, 20)
+        local healerIconBorder = aFrameDeco3:CreateTexture(nil, "OVERLAY")
+        healerIconBorder:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
+        healerIconBorder:SetSize(128, 128)
+        healerIconBorder:SetPoint("CENTER", healerIcon, 26, -26)
+
+        local versText = aFrameDeco2:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        versText:SetPoint("CENTER", 10, 5)
+        versText:SetText(
+            "|cffffd200Version: |cffffffffv0.1.0-|r|cffff8040alpha|r|cffa0a0a0| |rBuild: |cff00eeffinDev|r|cffe6bfbf-20250422|r|cffa0a0a0| |rAuthor: |cffffffffMaxranviir|r")
+
+        local debugCogButton = CreateFrame("Button", "huCogButton", aFrameDeco2, "UIPanelButtonTemplate")
+        debugCogButton:SetSize(16, 16)
+        debugCogButton:SetPoint("LEFT", versText, -20, 0)
+        local debugCog = debugCogButton:CreateTexture(nil, "ARTWORK")
+        debugCog:SetTexture("Interface\\Buttons\\UI-OptionsButton")
+        debugCog:SetAllPoints()
+        local debugCogDropdown = CreateFrame("Button", "huCogDropdown", debugCogButton, "UIDropDownMenuTemplate")
+        local function showCogMenu(self, level)
+            local info = UIDropDownMenu_CreateInfo()
+            info.text = "Enable Debug  |TInterface\\HelpFrame\\HelpIcon-Bug:16:16|t"
+            info.checked = HealerUtilsDB.debug
+            info.func = function()
+                HealerUtilsDB.debug = not HealerUtilsDB.debug
+                print("[Healer Utilities]: |cffe08612DEBUG|r |cffffd200is now|r",
+                    HealerUtilsDB.debug and "|cff00ff00enabled." or "|cffff0000disabled.")
+            end
+            info.isNotRadio = true
+            info.keepShownOnClick = true
+            UIDropDownMenu_AddButton(info, level)
+
+            info = UIDropDownMenu_CreateInfo()
+            info.text = "Enable inDev   |TInterface\\DialogFrame\\UI-Dialog-Icon-AlertNew:16:16|t"
+            info.checked = HealerUtilsDB.inDev
+            info.func = function()
+                HealerUtilsDB.inDev = not HealerUtilsDB.inDev
+                print("[Healer Utilities]: |cff00eeffIn-Development|r |cffffd200features are now|r",
+                    HealerUtilsDB.inDev and "|cff00ff00enabled." or "|cffff0000disabled.")
+            end
+            info.isNotRadio = true
+            info.keepShownOnClick = true
+            UIDropDownMenu_AddButton(info, level)
+        end
+        debugCogButton:SetScript("OnClick", function(self)
+            if not DropDownList1 or not DropDownList1:IsShown() then
+                UIDropDownMenu_Initialize(huCogDropdown, showCogMenu)
+                ToggleDropDownMenu(1, nil, huCogDropdown, self, 0, 0)
+            else
+                CloseDropDownMenus()
+            end
+        end)
+
+        local dedicationText = aFrameDeco2:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        dedicationText:SetPoint("CENTER", -7, -7)
+        dedicationText:SetText(
+            "|cffff80ffDedicated to my fiancée |cfff48cbaHayleria|r.|r")
+        local dedicationImage1 = aFrameDeco2:CreateTexture(nil, "ARTWORK")
+        dedicationImage1:SetTexture("Interface\\Icons\\inv_misc_rabbit_2")
+        dedicationImage1:SetSize(16, 16)
+        dedicationImage1:SetPoint("RIGHT", dedicationText, 15, 0)
+        dedicationImage1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+        local summaryText = aFrameDeco3:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        summaryText:SetPoint("CENTER", 0, 95)
+        summaryText:SetTextColor(1, 1, 1, 1)
+        summaryText:SetText(
+            "|cffffd200Healer Utilities|r is a lightweight, highly customizable utility addon\naimed primarily at providing a variety of useful features for |cff12d4aehealers|r and |cff0000ffmana|r classes.\nThe hallmark of which being:")
+        summaryText:SetScale(1.025)
+        local summaryTextA = aFrameDeco4:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        summaryTextA:SetPoint("CENTER", aFrameDeco4, 0, 40)
+        summaryTextA:SetFont("Fonts\\FRIZQT__.TTF", 18)
+        summaryTextA:SetText("Dynamic Drink Button")
+        local summaryTextAa = aFrameDeco4:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        summaryTextAa:SetPoint("CENTER", summaryTextA, "BOTTOM", 0, -60)
+        summaryTextAa:SetTextColor(1, 1, 1, 1)
+        summaryTextAa:SetText(
+            "A dynamically updated\nclickable button for drinking.\n\n-Dynamically adjusts icon based\non best available water\n\n-Fully |cff00ff00customizable|r icon\n\n-Fully |cff00ff00scaleable|r and |cff00ff00draggable!|r")
+        summaryTextAa:SetScale(0.9)
+        local summaryTextAIcon = aFrameDeco4:CreateTexture(nil, "ARTWORK")
+        summaryTextAIcon:SetTexture("Interface\\Icons\\inv_drink_07")
+        summaryTextAIcon:SetSize(24, 24)
+        summaryTextAIcon:SetPoint("CENTER", summaryTextA, "TOP", 0, 15)
+        local summaryTextB = aFrameDeco5:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        summaryTextB:SetPoint("CENTER", aFrameDeco5, 0, 40)
+        summaryTextB:SetFont("Fonts\\FRIZQT__.TTF", 18)
+        summaryTextB:SetText("Mana Announcement")
+        local summaryTextBa = aFrameDeco5:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        summaryTextBa:SetPoint("CENTER", summaryTextB, "BOTTOM", 0, -60)
+        summaryTextBa:SetTextColor(1, 1, 1, 1)
+        summaryTextBa:SetText(
+            "A chat feature for announcing\ncurrent mana as a percentile value.\n\n-Fully |cff00ff00customizable|r conditions\nand channel outputs!\n\n-Fully |cff00ff00customizable|r thresholds\nand cooldown\n\n-Fully |cff00ff00customizable|r messages")
+        summaryTextBa:SetScale(0.9)
+        summaryTextBIcon = aFrameDeco5:CreateTexture(nil, "ARTWORK")
+        summaryTextBIcon:SetTexture("Interface\\Icons\\ability_warrior_rallyingcry")
+        summaryTextBIcon:SetSize(24, 24)
+        summaryTextBIcon:SetPoint("CENTER", summaryTextB, "TOP", 0, 15)
+
+
+
 
         local settingsFrame = CreateFrame("Frame", "huSettingsFrame", optionsPanel)
         settingsFrame:SetAllPoints(optionsPanel)
@@ -303,7 +425,8 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
                 info.checked = (HealerUtilsDB.maChannel == channel.value)
                 info.func = function(self)
                     HealerUtilsDB.maChannel = self.value
-                    UIDropDownMenu_SetSelectedValue(maChannelDropdown, self.value)
+                    UIDropDownMenu_SetSelectedValue(maChannelDropdown, value)
+                    debugPrint("[Healer Utilities] |cffe08612[DEBUG]:|r Channel set to:", value)
                 end
                 UIDropDownMenu_AddButton(info, level)
             end
@@ -649,6 +772,7 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
         PanelTemplates_SetTab(settingsFrame, 1)
 
         local function selectTab(source, id)
+            PlaySound(841)
             if source ~= "settingsFrame" then
                 PanelTemplates_SetTab(optionsPanel, id)
                 aboutFrame:SetShown(id == 1)
@@ -694,6 +818,7 @@ loadFrame:SetScript("OnEvent", function(self, event, addOnName)
         if not LDBIcon:IsRegistered("HealerUtilities") then
             LDBIcon:Register("HealerUtilities", huLDB, HealerUtilsDB.mBtnPos)
         end
+
 
         SLASH_HEALUTILS1 = "/hutil"
         SlashCmdList["HEALUTILS"] = function(msg)
